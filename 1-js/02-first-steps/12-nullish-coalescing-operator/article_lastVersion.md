@@ -16,11 +16,9 @@ x = (a !== null && a !== undefined) ? a : b;
 
 这里有一个比较长的例子。
 
-假设，我们有一个用户，几个变量 `firstName`、`lastName` 和 `nickName`分别对应用户的名字、姓氏和昵称，如果用户不给这些变量输入任何值，那么这些变量都可能是未定义的。
+假设我们有几个变量 `firstName`、`lastName` 或 `nickName`，它们都是可选的。
 
-我们想要显示用户的名称：显示这三个变量中的一个，如果都没有设置值，则显示 "Anonymous"。
-
-让我们使用 `??` 操作符来选择第一个定义了值的变量：
+让我们选择有值的那一个变量并显示出来 (如果都没有值，则显示 "Anonymous"):
 
 ```js run
 let firstName = null;
@@ -28,14 +26,12 @@ let lastName = null;
 let nickName = "Supercoder";
 
 // 显示第一个不是 null 或 undefined 的变量
-*!*
 alert(firstName ?? lastName ?? nickName ?? "Anonymous"); // Supercoder
-*/!*
 ```
 
 ## 与 || 比较
 
-或操作符 `||` 的使用方式和 `??` 一样。事实上，我们可以把上面的代码中的 `??` 替换为 `||`，正如[上一章](info:logical-operators#or-finds-the-first-truthy-value)描述的那样，替换后我们能得到的相同的结果。
+空值合并操作符和或操作符 `||` 非常相似。其实，我们可以把上面的代码中的 `??` 替换为 `||`，得到的结果是一样的。
 
 重要的区别是:
 - `||` 返回第一个 *truthy* 值。（ *truthy* 是指：用逻辑判断时会返回 true 的值）
