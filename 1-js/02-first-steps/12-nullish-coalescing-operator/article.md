@@ -16,7 +16,7 @@ x = (a !== null && a !== undefined) ? a : b;
 
 这里有一个比较长的例子。
 
-假设，我们有一个用户，几个变量 `firstName`、`lastName` 和 `nickName`分别对应用户的名字、姓氏和昵称，如果用户不给这些变量输入任何值，那么这些变量都可能是未定义的。
+假设，我们有一个用户，几个变量 `firstName`、`lastName` 和 `nickName` 分别对应用户的名字、姓氏和昵称，如果用户不给这些变量输入任何值，那么这些变量都可能是未定义的。
 
 我们想要显示用户的名称：显示这三个变量中的一个，如果都没有设置值，则显示 "Anonymous"。
 
@@ -27,7 +27,7 @@ let firstName = null;
 let lastName = null;
 let nickName = "Supercoder";
 
-// 显示第一个不是 null 或 undefined 的变量
+// 显示第一个不是 null 或 undefined 的值
 *!*
 alert(firstName ?? lastName ?? nickName ?? "Anonymous"); // Supercoder
 */!*
@@ -43,13 +43,13 @@ alert(firstName ?? lastName ?? nickName ?? "Anonymous"); // Supercoder
 
 当我们想将 `null/undefined` 与 `0` 区别对待时，这一点非常重要。
 
-举个例子:
+举个例子，考虑这种情况:
 
 ```js
 height = height ?? 100;
 ```
 
-如果 `height` 未定义，将 `height` 设置为 `100` 。如果 `height` 是 `0` ，则维持原值不变。
+代码中的 `height` 如果未定义，将其设置为 `100` 。
 
 让我们将其与 `||` 比较:
 
@@ -60,17 +60,19 @@ alert(height || 100); // 100
 alert(height ?? 100); // 0
 ```
 
-这个例子里，`height || 100` 将零高度与 `null` 、`undefined` 或任何其他 falsy 值一样视为未设置值，以上结果取决于某些不正确的使用场景。（ *falsy* 是指：用逻辑判断时会返回 false 的值）
+这个例子里，`height || 100` 将高度 `0` 与 `null` 、`undefined` 以及任何其他 falsy 值一样视为未定义值，因此得到的结果是 `100`。（ *falsy* 是指：用逻辑判断时会返回 false 的值）
 
-`height ?? 100` 只有在 `height` 是 `null` 或 `undefined` 的情况下才返回 `100`.
+`height ?? 100` 仅当 `height` 准确的等于 `null` 或 `undefined` 时才返回 `100` 。
+
+哪种行为更好取决于特定的使用场景。当高度 `0` 为有效值时，最好使用 `??`。
 
 ## 优先级
 
 `??` 运算符的优先级相当低: 在 [MDN table](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table) 中是 `7`。
 
-这比大多数运算符低，比 `=` 和 `?` 高一点。
+因此 `??` 的优先级比大多数运算符低，比 `=` 和 `?` 高。
 
-所以，如果我们需要在复杂表达式中使用 `??`，那么可以考虑加括号：
+如果我们需要在复杂表达式中使用 `??`，那么可以考虑加括号：
 
 ```js run
 let height = null;
@@ -82,14 +84,18 @@ let area = (height ?? 100) * (width ?? 50);
 alert(area); // 5000
 ```
 
-否则，如果我们省略了括号，那么 `*` 的优先级较高，将优先执行，效果和下面的表达式一样:
+否则，如果我们省略了括号，`*` 的优先级比 `??` 高，会优先执行。
+
+效果和下面的表达式一样:
 
 ```js
-// 不正确的
+// 可能不正确的
 let area = height ?? (100 * width) ?? 50;
 ```
 
-还有一个相关的语言层面的限制。为了安全起见，禁止将 `??` 操作符 与 `||` 或 `&&` 操作符一起使用。
+还有一个相关的语言层面的限制。
+
+**出于安全原因，禁止将 `??` 操作符 与 `||` 或 `&&` 操作符一起使用。
 
 下面的代码会触发一个语法错误：
 
@@ -97,12 +103,15 @@ let area = height ?? (100 * width) ?? 50;
 let x = 1 && 2 ?? 3; // 语法错误
 ```
 
-这个限制肯定是值得商榷的，但由于某种原因，它被添加到了语言规范中。
+这个限制肯定是值得商榷的，但是为了避免在人们从 `||` 转向 `??` 时发生程序错误，它被添加到了语言规范中。
 
-可以显式地使用括号来修复这个问题：
+可以显式地使用括号来解决这个问题：
 
 ```js run
+*!*
 let x = (1 && 2) ?? 3; // 有效
+*/!*
+
 alert(x); // 2
 ```
 
